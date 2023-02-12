@@ -19,7 +19,6 @@ func InitContainer() (*Container, error) {
 	if err != nil {
 		return nil, err
 	}
-	syncService := service.NewSyncService()
-	container := NewContainer(chunkService, hashService, heartbeatService, syncService)
+	container := NewContainer(chunkService, hashService, heartbeatService)
 	return container, nil
 }

@@ -17,7 +17,6 @@ func InitContainer() (*Container, error) {
 		service.NewChunkService,
 		service.NewHashService,
 		service.NewHeartbeatService,
-		service.NewSyncService,
 	)
 	return &Container{}, nil
 }
