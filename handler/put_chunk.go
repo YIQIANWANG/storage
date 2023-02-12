@@ -2,7 +2,7 @@ package handler
 
 import (
 	"github.com/gin-gonic/gin"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"storage/app"
 )
@@ -11,7 +11,7 @@ func PutChunk(c *gin.Context) {
 	chunkID := c.Query("chunkID")
 	// chunkID := c.PostForm("chunkID")
 	// chunkID := c.Request.Form.Get("chunkID")
-	chunkData, _ := ioutil.ReadAll(c.Request.Body)
+	chunkData, _ := io.ReadAll(c.Request.Body)
 
 	chunkService := app.Default.GetChunkService()
 	err := chunkService.PutChunk(chunkID, chunkData)

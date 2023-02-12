@@ -28,15 +28,18 @@ func (cs *ChunkService) PutChunk(chunkID string, chunkData []byte) error {
 	if PathExists(conf.ChunkFilePath + "/" + chunkID) {
 		return nil
 	}
+
 	err := WriteFileByBytes(conf.ChunkFilePath+"/"+chunkID, chunkData)
 	if err != nil {
 		log.Println("Write Chunk Failed: ", err)
 		return err
 	}
+
 	data.Lock.Lock()
 	data.OperationCount++
 	data.Lock.Unlock()
 	_, _ = data.OpLogFile.WriteString("+ " + chunkID + "\n")
+
 	return nil
 }
 
@@ -46,23 +49,32 @@ func (cs *ChunkService) GetChunk(chunkID string) ([]byte, error) {
 		log.Println("Read Chunk Failed: ", err)
 		return nil, err
 	}
+
 	return chunkData, nil
 }
 
-func (cs *ChunkService) DelChunk(chunkID string) error {
+func (cs *ChunkService) DelChunk(chunkID string) (int, error) {
 	if !PathExists(conf.ChunkFilePath + "/" + chunkID) {
-		return nil
+		return 0, nil
 	}
-	err := os.Remove(conf.ChunkFilePath + "/" + chunkID)
+
+	size, err := ComputeFileSize(conf.ChunkFilePath + "/" + chunkID)
 	if err != nil {
 		log.Println("Delete Chunk Failed: ", err)
-		return err
+		return -1, err
 	}
+	err = os.Remove(conf.ChunkFilePath + "/" + chunkID)
+	if err != nil {
+		log.Println("Delete Chunk Failed: ", err)
+		return -1, err
+	}
+
 	data.Lock.Lock()
 	data.OperationCount++
 	data.Lock.Unlock()
 	_, _ = data.OpLogFile.WriteString("- " + chunkID + "\n")
-	return nil
+
+	return size, nil
 }
 
 func (cs *ChunkService) GetChunkIDs() ([]byte, error) {
@@ -71,6 +83,7 @@ func (cs *ChunkService) GetChunkIDs() ([]byte, error) {
 		log.Println("Open OpLog Failed: ", err)
 		return nil, err
 	}
+
 	chunkIDSet := make(map[string]bool)
 	fileScanner := bufio.NewScanner(oplog)
 	var rest int64
@@ -94,5 +107,6 @@ func (cs *ChunkService) GetChunkIDs() ([]byte, error) {
 		}
 	}
 	respData, _ := json.Marshal(chunkIDs)
+	
 	return respData, nil
 }

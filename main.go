@@ -12,7 +12,6 @@ func main() {
 	router.GET("/chunk", handler.GetChunk)
 	router.DELETE("/chunk", handler.DelChunk)
 	router.GET("chunkIDs", handler.GetChunkIDs)
-	router.GET("/sync", handler.Synchronize)
 	router.GET("/PING", handler.PING)
 	router.GET("/RESET", handler.RESET)
 

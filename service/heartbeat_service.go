@@ -2,7 +2,6 @@ package service
 
 import (
 	"context"
-	"fmt"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -22,6 +21,7 @@ func NewHeartbeatService() (*HeartbeatService, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	return &HeartbeatService{mongoClient: client}, nil
 }
 
@@ -54,6 +54,7 @@ func insertStorage(mongoClient *mongo.Client) error {
 		UpdateTime:     time.Now().Unix(),
 	}
 	_, err := mongoClient.Database(conf.DATABASE).Collection(consts.Storages).InsertOne(context.TODO(), storage)
+
 	return err
 }
 
@@ -61,14 +62,22 @@ func updateStorageUpdateTime(mongoClient *mongo.Client) error {
 	filter := bson.M{"storageAddress": conf.IP + ":" + conf.PORT}
 	update := bson.M{"$set": bson.M{"updateTime": time.Now().Unix()}}
 	_, err := mongoClient.Database(conf.DATABASE).Collection(consts.Storages).UpdateOne(context.TODO(), filter, update)
+
 	return err
 }
 
+/*
 func getURI() string {
 	protocol := conf.PROTOCOL
 	username := conf.USERNAME
 	password := conf.PASSWORD
 	address := conf.ADDRESS
 	authentication := conf.AUTHENTICATION
+
 	return fmt.Sprintf("%s://%s:%s@%s/%s", protocol, username, password, address, authentication)
+}
+*/
+
+func getURI() string {
+	return "mongodb://localhost:27017"
 }

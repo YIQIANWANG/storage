@@ -16,7 +16,6 @@ func init() {
 	LogInit()
 	app.InitDefault()
 	ReporterInit()
-	DataInit()
 }
 
 func LogInit() {
@@ -27,7 +26,7 @@ func LogInit() {
 		}
 	}
 
-	// date log
+	// error log
 	dataLogFileName := fmt.Sprintf("%s/%s-%s-%s", conf.LogFilePath, time.Now().Format("2006"), time.Now().Format("01"), time.Now().Format("02"))
 	dataLogFile, err := os.OpenFile(dataLogFileName, os.O_CREATE|os.O_APPEND|os.O_RDWR, os.ModePerm) // 创建、追加、读写，777（所有权限）
 	if err != nil {
@@ -52,8 +51,4 @@ func ReporterInit() {
 		panic(err)
 	}
 	heartbeatService.StartReport()
-}
-
-func DataInit() {
-	data.DstStorageAddress = make(map[string]bool)
 }

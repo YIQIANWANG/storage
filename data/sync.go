@@ -5,9 +5,6 @@ import (
 	"sync"
 )
 
-// DstStorageAddress 当前正在同步的同组Storage
-var DstStorageAddress map[string]bool
-
 // OperationCount 操作数，并发不安全需要加锁
 var OperationCount int64
 var Lock sync.RWMutex
