@@ -1,14 +1,12 @@
 package conf
 
-// 文件路径
+// 文件存放路径
 const (
 	LogFilePath   = "logs"
+	OpLogName     = "oplog"
 	ChunkFilePath = "chunks"
 	//HashFilePath = "hashes"
 )
-
-// 操作日志文件
-const OpLogName = "oplog"
 
 // 服务配置
 const (
@@ -17,7 +15,7 @@ const (
 	GROUP = "group0"
 )
 
-// MongoDB
+// MongoDB配置
 const (
 	PROTOCOL       = "mongodb"
 	USERNAME       = "mongouser"
