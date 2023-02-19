@@ -10,9 +10,10 @@ const (
 
 // 服务配置
 const (
-	IP    = "localhost"
-	PORT  = "8800"
-	GROUP = "group0"
+	IP                = "localhost"
+	PORT              = "8800"
+	GROUP             = "group0"
+	HeartbeatInternal = 2 // 心跳间隔为2s
 )
 
 // MongoDB配置

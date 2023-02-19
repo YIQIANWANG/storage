@@ -38,7 +38,7 @@ func (hs *HeartbeatService) StartReport() {
 					log.Println("PutStatus failed: ", err)
 				}
 			}()
-			time.Sleep(10 * time.Second)
+			time.Sleep(conf.HeartbeatInternal * time.Second)
 		}
 	}()
 }
