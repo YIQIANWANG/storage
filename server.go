@@ -26,19 +26,19 @@ func LogInit() {
 		}
 	}
 
-	// error log
-	dataLogFileName := fmt.Sprintf("%s/%s-%s-%s", conf.LogFilePath, time.Now().Format("2006"), time.Now().Format("01"), time.Now().Format("02"))
-	dataLogFile, err := os.OpenFile(dataLogFileName, os.O_CREATE|os.O_APPEND|os.O_RDWR, os.ModePerm) // 创建、追加、读写，777（所有权限）
+	// Log
+	logFileName := fmt.Sprintf("%s/%s-%s-%s", conf.LogFilePath, time.Now().Format("2006"), time.Now().Format("01"), time.Now().Format("02"))
+	logFile, err := os.OpenFile(logFileName, os.O_CREATE|os.O_APPEND|os.O_RDWR, os.ModePerm) // 创建、追加、读写，777（所有权限）
 	if err != nil {
 		panic(err)
 	}
-	multiWriter := io.MultiWriter(os.Stdout, dataLogFile)
+	multiWriter := io.MultiWriter(os.Stdout, logFile)
 	log.SetOutput(multiWriter)
 	log.SetFlags(log.Ldate | log.Ltime | log.Lshortfile)
 
-	// operation Log
+	// Operation Log
 	opLogFileName := conf.LogFilePath + "/" + conf.OpLogName
-	data.OpLogFile, err = os.OpenFile(opLogFileName, os.O_CREATE|os.O_APPEND|os.O_RDWR, os.ModePerm)
+	data.OpLog, err = os.OpenFile(opLogFileName, os.O_CREATE|os.O_APPEND|os.O_RDWR, os.ModePerm)
 	if err != nil {
 		panic(err)
 	}

@@ -34,11 +34,13 @@ func (cs *ChunkService) PutChunk(chunkID string, chunkData []byte) error {
 		log.Println("Write Chunk Failed: ", err)
 		return err
 	}
-
-	data.Lock.Lock()
-	data.OperationCount++
-	data.Lock.Unlock()
-	_, _ = data.OpLogFile.WriteString("+ " + chunkID + "\n")
+	data.AvailableCapLock.Lock()
+	data.AvailableCap -= len(chunkData)
+	data.AvailableCapLock.Unlock()
+	data.OpCountLock.Lock()
+	data.OpCount++
+	data.OpCountLock.Unlock()
+	_, _ = data.OpLog.WriteString("+ " + chunkID + "\n")
 
 	return nil
 }
@@ -53,28 +55,30 @@ func (cs *ChunkService) GetChunk(chunkID string) ([]byte, error) {
 	return chunkData, nil
 }
 
-func (cs *ChunkService) DelChunk(chunkID string) (int, error) {
+func (cs *ChunkService) DelChunk(chunkID string) error {
 	if !PathExists(conf.ChunkFilePath + "/" + chunkID) {
-		return 0, nil
+		return nil
 	}
 
 	size, err := ComputeFileSize(conf.ChunkFilePath + "/" + chunkID)
 	if err != nil {
 		log.Println("Delete Chunk Failed: ", err)
-		return -1, err
+		return err
 	}
 	err = os.Remove(conf.ChunkFilePath + "/" + chunkID)
 	if err != nil {
 		log.Println("Delete Chunk Failed: ", err)
-		return -1, err
+		return err
 	}
+	data.AvailableCapLock.Lock()
+	data.AvailableCap += size
+	data.AvailableCapLock.Unlock()
+	data.OpCountLock.Lock()
+	data.OpCount++
+	data.OpCountLock.Unlock()
+	_, _ = data.OpLog.WriteString("- " + chunkID + "\n")
 
-	data.Lock.Lock()
-	data.OperationCount++
-	data.Lock.Unlock()
-	_, _ = data.OpLogFile.WriteString("- " + chunkID + "\n")
-
-	return size, nil
+	return nil
 }
 
 func (cs *ChunkService) GetChunkIDs() ([]byte, error) {
@@ -87,9 +91,9 @@ func (cs *ChunkService) GetChunkIDs() ([]byte, error) {
 	chunkIDSet := make(map[string]bool)
 	fileScanner := bufio.NewScanner(oplog)
 	var rest int64
-	data.Lock.RLock()
-	rest = data.OperationCount
-	data.Lock.RUnlock()
+	data.OpCountLock.Lock()
+	rest = data.OpCount
+	data.OpCountLock.Unlock()
 	for fileScanner.Scan() && rest > 0 {
 		singleOperation := fileScanner.Text()
 		operation := strings.Split(singleOperation, " ")
@@ -107,6 +111,6 @@ func (cs *ChunkService) GetChunkIDs() ([]byte, error) {
 		}
 	}
 	respData, _ := json.Marshal(chunkIDs)
-	
+
 	return respData, nil
 }
