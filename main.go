@@ -13,7 +13,6 @@ func main() {
 	router.DELETE("/chunk", handler.DelChunk)
 	router.GET("chunkIDs", handler.GetChunkIDs)
 	router.GET("/PING", handler.PING)
-	router.GET("/RESET", handler.RESET)
 
 	err := router.Run(":" + conf.PORT)
 	if err != nil {

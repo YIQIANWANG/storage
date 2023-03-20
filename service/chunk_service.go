@@ -18,13 +18,6 @@ func NewChunkService() *ChunkService {
 }
 
 func (cs *ChunkService) PutChunk(chunkID string, chunkData []byte) error {
-	if !PathExists(conf.ChunkFilePath) {
-		err := os.MkdirAll(conf.ChunkFilePath, os.ModePerm)
-		if err != nil {
-			log.Println("Create Chunk Directory Failed: ", err)
-			return err
-		}
-	}
 	if PathExists(conf.ChunkFilePath + "/" + chunkID) {
 		return nil
 	}

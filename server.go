@@ -13,17 +13,19 @@ import (
 )
 
 func init() {
-	LogInit()
+	InitLog()
+	InitChunk()
 	app.InitDefault()
-	ReporterInit()
+	InitReporter()
 }
 
-func LogInit() {
-	if !service.PathExists(conf.LogFilePath) {
-		err := os.MkdirAll(conf.LogFilePath, os.ModePerm)
-		if err != nil {
-			panic(err)
-		}
+func InitLog() {
+	if service.PathExists(conf.LogFilePath) {
+		_ = os.RemoveAll(conf.LogFilePath)
+	}
+	err := os.MkdirAll(conf.LogFilePath, os.ModePerm)
+	if err != nil {
+		panic(err)
 	}
 
 	// Log
@@ -44,7 +46,17 @@ func LogInit() {
 	}
 }
 
-func ReporterInit() {
+func InitChunk() {
+	if service.PathExists(conf.ChunkFilePath) {
+		_ = os.RemoveAll(conf.ChunkFilePath)
+	}
+	err := os.MkdirAll(conf.ChunkFilePath, os.ModePerm)
+	if err != nil {
+		panic(err)
+	}
+}
+
+func InitReporter() {
 	heartbeatService := app.Default.GetHeartbeatService()
 	err := heartbeatService.InitReport()
 	if err != nil {
