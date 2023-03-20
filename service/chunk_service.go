@@ -24,7 +24,7 @@ func (cs *ChunkService) PutChunk(chunkID string, chunkData []byte) error {
 
 	err := WriteFileByBytes(conf.ChunkFilePath+"/"+chunkID, chunkData)
 	if err != nil {
-		log.Println("Write Chunk Failed: ", err)
+		log.Println("PutChunk Failed: ", err)
 		return err
 	}
 	data.AvailableCapLock.Lock()
@@ -41,7 +41,7 @@ func (cs *ChunkService) PutChunk(chunkID string, chunkData []byte) error {
 func (cs *ChunkService) GetChunk(chunkID string) ([]byte, error) {
 	chunkData, err := ReadFileByBytes(conf.ChunkFilePath + "/" + chunkID)
 	if err != nil {
-		log.Println("Read Chunk Failed: ", err)
+		log.Println("GetChunk Failed: ", err)
 		return nil, err
 	}
 
@@ -55,12 +55,12 @@ func (cs *ChunkService) DelChunk(chunkID string) error {
 
 	size, err := ComputeFileSize(conf.ChunkFilePath + "/" + chunkID)
 	if err != nil {
-		log.Println("Delete Chunk Failed: ", err)
+		log.Println("DelChunk Failed: ", err)
 		return err
 	}
 	err = os.Remove(conf.ChunkFilePath + "/" + chunkID)
 	if err != nil {
-		log.Println("Delete Chunk Failed: ", err)
+		log.Println("DelChunk Failed: ", err)
 		return err
 	}
 	data.AvailableCapLock.Lock()
@@ -77,7 +77,7 @@ func (cs *ChunkService) DelChunk(chunkID string) error {
 func (cs *ChunkService) GetChunkIDs() ([]byte, error) {
 	oplog, err := os.Open(conf.LogFilePath + "/" + conf.OpLogName)
 	if err != nil {
-		log.Println("Open OpLog Failed: ", err)
+		log.Println("GetChunkIDs Failed: ", err)
 		return nil, err
 	}
 

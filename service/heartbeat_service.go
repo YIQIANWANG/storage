@@ -34,9 +34,9 @@ func (hs *HeartbeatService) StartReport() {
 	go func() {
 		for true {
 			go func() {
-				err := hs.putStatus()
+				err := hs.updateStatus()
 				if err != nil {
-					log.Println("PutStatus failed: ", err)
+					log.Println("UpdateStatus failed: ", err)
 				}
 			}()
 			time.Sleep(conf.HeartbeatInternal * time.Second)
@@ -44,7 +44,7 @@ func (hs *HeartbeatService) StartReport() {
 	}()
 }
 
-func (hs *HeartbeatService) putStatus() error {
+func (hs *HeartbeatService) updateStatus() error {
 	return updateStorage(hs.mongoClient)
 }
 
