@@ -14,28 +14,21 @@ func InitDefault() {
 
 type Container struct {
 	chunkService     *service.ChunkService
-	hashService      *service.HashService
 	heartbeatService *service.HeartbeatService
 }
 
 func NewContainer(
 	chunkService *service.ChunkService,
-	hashService *service.HashService,
 	heartbeatService *service.HeartbeatService,
 ) *Container {
 	return &Container{
 		chunkService:     chunkService,
-		hashService:      hashService,
 		heartbeatService: heartbeatService,
 	}
 }
 
 func (c *Container) GetChunkService() *service.ChunkService {
 	return c.chunkService
-}
-
-func (c *Container) GetHashService() *service.HashService {
-	return c.hashService
 }
 
 func (c *Container) GetHeartbeatService() *service.HeartbeatService {

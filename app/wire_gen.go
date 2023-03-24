@@ -14,11 +14,10 @@ import (
 
 func InitContainer() (*Container, error) {
 	chunkService := service.NewChunkService()
-	hashService := service.NewHashService()
 	heartbeatService, err := service.NewHeartbeatService()
 	if err != nil {
 		return nil, err
 	}
-	container := NewContainer(chunkService, hashService, heartbeatService)
+	container := NewContainer(chunkService, heartbeatService)
 	return container, nil
 }
