@@ -12,7 +12,7 @@ func DelChunk(c *gin.Context) {
 	chunkService := app.Default.GetChunkService()
 	err := chunkService.DelChunk(chunkID)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"message": err, "size": -1})
+		c.JSON(http.StatusBadRequest, gin.H{"message": err})
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"message": "Success."})
