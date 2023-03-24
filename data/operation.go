@@ -9,5 +9,5 @@ import (
 var OpCount int64
 var OpCountLock sync.Mutex
 
-// OpLog 日志文件，追加写并发安全
+// OpLog 操作日志文件，追加写并发安全
 var OpLog *os.File

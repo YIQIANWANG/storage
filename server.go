@@ -28,7 +28,7 @@ func initLog() {
 		panic(err)
 	}
 
-	// Log
+	// 日志（一般日志）
 	logFileName := fmt.Sprintf("%s/%s-%s-%s", conf.LogFilePath, time.Now().Format("2006"), time.Now().Format("01"), time.Now().Format("02"))
 	logFile, err := os.OpenFile(logFileName, os.O_CREATE|os.O_APPEND|os.O_RDWR, os.ModePerm) // 创建、追加、读写，777（所有权限）
 	if err != nil {
@@ -38,7 +38,7 @@ func initLog() {
 	log.SetOutput(multiWriter)
 	log.SetFlags(log.Ldate | log.Ltime | log.Lshortfile)
 
-	// Operation Log
+	// 操作日志
 	opLogFileName := conf.LogFilePath + "/" + conf.OpLogName
 	data.OpLog, err = os.OpenFile(opLogFileName, os.O_CREATE|os.O_APPEND|os.O_RDWR, os.ModePerm)
 	if err != nil {

@@ -14,7 +14,7 @@ const (
 // 服务配置
 const (
 	IP                = "localhost"
-	PORT              = "8800"
+	PORT              = "8888"
 	GROUP             = "group0"
 	Capacity          = 10000000000 // 最大容量10GB
 	HeartbeatInternal = 2           // 心跳间隔为2s
