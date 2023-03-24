@@ -13,13 +13,13 @@ import (
 )
 
 func init() {
-	InitLog()
-	InitChunk()
+	initLog()
+	initChunk()
 	app.InitDefault()
-	InitReporter()
+	initReporter()
 }
 
-func InitLog() {
+func initLog() {
 	if service.PathExists(conf.LogFilePath) {
 		_ = os.RemoveAll(conf.LogFilePath)
 	}
@@ -46,7 +46,7 @@ func InitLog() {
 	}
 }
 
-func InitChunk() {
+func initChunk() {
 	if service.PathExists(conf.ChunkFilePath) {
 		_ = os.RemoveAll(conf.ChunkFilePath)
 	}
@@ -56,7 +56,7 @@ func InitChunk() {
 	}
 }
 
-func InitReporter() {
+func initReporter() {
 	heartbeatService := app.Default.GetHeartbeatService()
 	err := heartbeatService.InitReport()
 	if err != nil {
